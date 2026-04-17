@@ -13,9 +13,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/lucavdw/bounty-hunter-mcp"
-Repository = "https://github.com/lucavdw/bounty-hunter-mcp"
-Issues = "https://github.com/lucavdw/bounty-hunter-mcp/issues"
+Homepage = "https://github.com/L-ubu/bounty-hunter-mcp"
+Repository = "https://github.com/L-ubu/bounty-hunter-mcp"
+Issues = "https://github.com/L-ubu/bounty-hunter-mcp/issues"
 
 [project.scripts]
 bounty-hunter = "bounty_hunter.server:main"
