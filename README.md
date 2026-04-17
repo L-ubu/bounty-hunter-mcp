@@ -45,38 +45,38 @@ The AI gets structured recon data back instead of raw file contents. You spend t
 ## How It Works
 
 ```
-    ┌───────────────────────────────────────────────────┐
-    │              Claude Code CLI                      │
-    │                                                   │
-    │  "Analyze this repo for bounty targets"           │
-    └────────────────────────┬──────────────────────────┘
-                             │ MCP Protocol
-    ┌────────────────────────v──────────────────────────┐
-    │           bounty-hunter-mcp server                │
-    │                                                   │
-    │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐  │
-    │  │    Recon    │ │   Testing   │ │    Intel    │  │
-    │  │             │ │             │ │             │  │
-    │  │  Routes     │ │  CORS       │ │  NVD        │  │
-    │  │  Surface    │ │  Headers    │ │  GitHub     │  │
-    │  │  Sinks      │ │  Auth       │ │  CVEs       │  │
-    │  │  Deps       │ │  SSRF       │ │             │  │
-    │  └──────┬──────┘ └──────┬──────┘ └──────┬──────┘  │
-    │         │               │               │         │
-    │  ┌──────v───────────────v───────────────v──────┐  │
-    │  │       SQLite Intelligence Store             │  │
-    │  │    notes · cache · repos · vulns            │  │
-    │  └─────────────────────────────────────────────┘  │
-    └───────────────────────────────────────────────────┘
-                             │
-    ┌────────────────────────v──────────────────────────┐
-    │    ~/Projects/bounty-targets/                     │
-    │                                                   │
-    │  owner_repo/        <- auto-cloned                │
-    │  ├── src/           <- Claude reads with          │
-    │  ├── routes/           native Read/Grep           │
-    │  └── report.json    <- generated report           │
-    └───────────────────────────────────────────────────┘
++---------------------------------------------------+
+|              Claude Code CLI                       |
+|                                                    |
+|  "Analyze this repo for bounty targets"            |
++------------------------+---------------------------+
+                         | MCP Protocol
++------------------------v---------------------------+
+|           bounty-hunter-mcp server                 |
+|                                                    |
+|  +-------------+ +-------------+ +-------------+  |
+|  |    Recon    | |   Testing   | |    Intel    |  |
+|  |             | |             | |             |  |
+|  |  Routes     | |  CORS       | |  NVD        |  |
+|  |  Surface    | |  Headers    | |  GitHub     |  |
+|  |  Sinks      | |  Auth       | |  CVEs       |  |
+|  |  Deps       | |  SSRF       | |             |  |
+|  +------+------+ +------+------+ +------+------+  |
+|         |               |               |          |
+|  +------v---------------v---------------v------+   |
+|  |       SQLite Intelligence Store             |   |
+|  |    notes . cache . repos . vulns            |   |
+|  +---------------------------------------------+   |
++----------------------------------------------------+
+                         |
++------------------------v---------------------------+
+|    ~/Projects/bounty-targets/                      |
+|                                                    |
+|  owner_repo/        <- auto-cloned                 |
+|  |-- src/           <- Claude reads with           |
+|  |-- routes/           native Read/Grep            |
+|  +-- report.json    <- generated report            |
++----------------------------------------------------+
 ```
 
 Repos are cloned locally so Claude uses its **native file tools** (Read, Grep, Glob) for deep analysis. The MCP tools handle the *structured* parts — route extraction, sink detection, CVSS scoring, report formatting.
