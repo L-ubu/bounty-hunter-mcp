@@ -1,0 +1,144 @@
+express:
+  - pattern: "cors({origin: '*'})"
+    vuln: "CORS wildcard with credentials"
+    severity: high
+    cwe: CWE-942
+  - pattern: "app.use(bodyParser.json())"
+    vuln: "Prototype pollution via body parser"
+    check: "Verify __proto__ handling"
+    severity: medium
+    cwe: CWE-1321
+  - pattern: "eval(req."
+    vuln: "Server-side code injection"
+    severity: critical
+    cwe: CWE-94
+  - pattern: "child_process.exec(.*req\\."
+    vuln: "Command injection"
+    severity: critical
+    cwe: CWE-78
+  - pattern: "res.redirect(req."
+    vuln: "Open redirect"
+    severity: medium
+    cwe: CWE-601
+
+fastapi:
+  - pattern: "Route without Depends()"
+    vuln: "Missing authentication on endpoint"
+    severity: high
+    cwe: CWE-306
+  - pattern: "CORSMiddleware.*allow_origins.*\\*"
+    vuln: "CORS wildcard"
+    severity: high
+    cwe: CWE-942
+  - pattern: "subprocess.run(.*f\""
+    vuln: "Command injection via f-string"
+    severity: critical
+    cwe: CWE-78
+  - pattern: "exec(.*request"
+    vuln: "Code injection"
+    severity: critical
+    cwe: CWE-94
+
+flask:
+  - pattern: "@app.route.*methods.*POST"
+    vuln: "Check for CSRF protection"
+    check: "Verify csrf_protect or WTForms CSRF"
+    severity: medium
+    cwe: CWE-352
+  - pattern: "render_template_string(.*request"
+    vuln: "Server-side template injection (SSTI)"
+    severity: critical
+    cwe: CWE-1336
+
+django:
+  - pattern: "@csrf_exempt"
+    vuln: "CSRF protection disabled"
+    severity: medium
+    cwe: CWE-352
+  - pattern: "DEBUG = True"
+    vuln: "Debug mode in production"
+    severity: medium
+    cwe: CWE-489
+  - pattern: "ALLOWED_HOSTS.*\\*"
+    vuln: "Host header injection"
+    severity: medium
+    cwe: CWE-644
+  - pattern: ".raw(.*%s"
+    vuln: "SQL injection via raw query"
+    severity: critical
+    cwe: CWE-89
+  - pattern: ".extra(.*%s"
+    vuln: "SQL injection via extra()"
+    severity: critical
+    cwe: CWE-89
+
+nextjs:
+  - pattern: "app/api/.* without middleware"
+    vuln: "Unprotected API routes"
+    check: "Verify middleware.ts covers /api/ paths"
+    severity: high
+    cwe: CWE-306
+  - pattern: "getServerSideProps.*prisma"
+    vuln: "Data exposure via SSR props"
+    check: "Verify sensitive fields are filtered before returning"
+    severity: medium
+    cwe: CWE-200
+  - pattern: "dangerouslySetInnerHTML"
+    vuln: "Potential XSS via raw HTML injection"
+    severity: high
+    cwe: CWE-79
+
+go:
+  - pattern: "fmt.Sprintf.*SQL"
+    vuln: "SQL injection via string formatting"
+    severity: critical
+    cwe: CWE-89
+  - pattern: "exec.Command(.*\\+"
+    vuln: "Command injection"
+    severity: critical
+    cwe: CWE-78
+  - pattern: "http.Get(.*\\+"
+    vuln: "SSRF via user-controlled URL"
+    severity: high
+    cwe: CWE-918
+  - pattern: '== apiKey'
+    vuln: "Non-constant-time API key comparison"
+    severity: medium
+    cwe: CWE-208
+
+rust:
+  - pattern: "Command::new(.*format!"
+    vuln: "Command injection"
+    severity: critical
+    cwe: CWE-78
+  - pattern: "reqwest::get(.*&"
+    vuln: "SSRF via user-controlled URL"
+    severity: high
+    cwe: CWE-918
+  - pattern: "== api_key"
+    vuln: "Non-constant-time key comparison"
+    check: "Should use constant_time_eq"
+    severity: medium
+    cwe: CWE-208
+
+general:
+  - pattern: "password.*=.*[\"'][^\"']{3,20}[\"']"
+    vuln: "Hardcoded password"
+    severity: high
+    cwe: CWE-798
+  - pattern: "(api_key|apikey|secret).*=.*[\"'][A-Za-z0-9]{16,}[\"']"
+    vuln: "Hardcoded API key/secret"
+    severity: high
+    cwe: CWE-798
+  - pattern: "JWT_SECRET.*=.*[\"']"
+    vuln: "Hardcoded JWT secret"
+    severity: critical
+    cwe: CWE-798
+  - pattern: "redirect_uri.*=.*req\\."
+    vuln: "Open redirect via user-controlled redirect_uri"
+    severity: high
+    cwe: CWE-601
+  - pattern: "Access-Control-Allow-Origin.*\\*"
+    vuln: "CORS wildcard in response header"
+    severity: high
+    cwe: CWE-942
