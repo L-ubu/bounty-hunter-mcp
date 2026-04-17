@@ -1,0 +1,21 @@
+[project]
+name = "bounty-hunter-mcp"
+version = "0.1.0"
+description = "AI-powered bug bounty hunting toolkit — MCP server for Claude Code"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.13"
+keywords = ["mcp", "bug-bounty", "security", "vulnerability", "claude", "ai"]
+dependencies = [
+    "mcp[cli]>=1.2.0",
+    "httpx>=0.28.0",
+    "beautifulsoup4>=4.12.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/lucavdw/bounty-hunter-mcp"
+Repository = "https://github.com/lucavdw/bounty-hunter-mcp"
+Issues = "https://github.com/lucavdw/bounty-hunter-mcp/issues"
+
+[project.scripts]
+bounty-hunter = "bounty_hunter.server:main"
