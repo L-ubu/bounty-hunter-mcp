@@ -29,16 +29,16 @@ recon, live testing, intelligence, and report generation in single tool calls.
 
 Bug bounty hunting with AI burns tokens on repetitive grunt work:
 
-| Without this toolkit | With this toolkit |
-|---|---|
-| 10+ Read/Grep calls to understand attack surface | **1 `map_surface` call** |
-| Manual curl for CORS, headers, auth checks | **1 `test_endpoint` call** |
-| Browsing NVD + GitHub advisories separately | **1 `check_vulns` call** |
-| Writing reports from scratch every time | **1 `make_report` call** with auto CVSS |
-| Losing investigation context between sessions | **`note` tool** persists across sessions |
-| Re-cloning and navigating repos manually | **Auto-clone** to `~/Projects/bounty-targets/` |
+| Without this toolkit                             | With this toolkit                              |
+| ------------------------------------------------ | ---------------------------------------------- |
+| 10+ Read/Grep calls to understand attack surface | **1 `map_surface` call**                       |
+| Manual curl for CORS, headers, auth checks       | **1 `test_endpoint` call**                     |
+| Browsing NVD + GitHub advisories separately      | **1 `check_vulns` call**                       |
+| Writing reports from scratch every time          | **1 `make_report` call** with auto CVSS        |
+| Losing investigation context between sessions    | **`note` tool** persists across sessions       |
+| Re-cloning and navigating repos manually         | **Auto-clone** to `~/Projects/bounty-targets/` |
 
-The AI gets structured recon data back instead of raw file contents. You spend tokens on *thinking*, not *plumbing*.
+The AI gets structured recon data back instead of raw file contents. You spend tokens on _thinking_, not _plumbing_.
 
 ---
 
@@ -54,14 +54,14 @@ The AI gets structured recon data back instead of raw file contents. You spend t
 +------------------------v---------------------------+
 |           bounty-hunter-mcp server                 |
 |                                                    |
-|  +-------------+ +-------------+ +-------------+  |
-|  |    Recon    | |   Testing   | |    Intel    |  |
-|  |             | |             | |             |  |
-|  |  Routes     | |  CORS       | |  NVD        |  |
-|  |  Surface    | |  Headers    | |  GitHub     |  |
-|  |  Sinks      | |  Auth       | |  CVEs       |  |
-|  |  Deps       | |  SSRF       | |             |  |
-|  +------+------+ +------+------+ +------+------+  |
+|  +-------------+ +-------------+ +-------------+   |
+|  |    Recon    | |   Testing   | |    Intel    |   |
+|  |             | |             | |             |   |
+|  |  Routes     | |  CORS       | |  NVD        |   |
+|  |  Surface    | |  Headers    | |  GitHub     |   |
+|  |  Sinks      | |  Auth       | |  CVEs       |   |
+|  |  Deps       | |  SSRF       | |             |   |
+|  +------+------+ +------+------+ +------+------+   |
 |         |               |               |          |
 |  +------v---------------v---------------v------+   |
 |  |       SQLite Intelligence Store             |   |
@@ -79,7 +79,7 @@ The AI gets structured recon data back instead of raw file contents. You spend t
 +----------------------------------------------------+
 ```
 
-Repos are cloned locally so Claude uses its **native file tools** (Read, Grep, Glob) for deep analysis. The MCP tools handle the *structured* parts — route extraction, sink detection, CVSS scoring, report formatting.
+Repos are cloned locally so Claude uses its **native file tools** (Read, Grep, Glob) for deep analysis. The MCP tools handle the _structured_ parts — route extraction, sink detection, CVSS scoring, report formatting.
 
 ---
 
@@ -87,43 +87,43 @@ Repos are cloned locally so Claude uses its **native file tools** (Read, Grep, G
 
 ### Recon
 
-| Tool | What it does |
-|------|-------------|
-| **`map_routes`** | Auto-clones repo. Extracts all HTTP routes with auth status across 9 frameworks. Returns only interesting routes (unprotected, admin, debug, upload) by default. |
+| Tool              | What it does                                                                                                                                                                            |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`map_routes`**  | Auto-clones repo. Extracts all HTTP routes with auth status across 9 frameworks. Returns only interesting routes (unprotected, admin, debug, upload) by default.                        |
 | **`map_surface`** | One-call attack surface summary: framework, auth type, validation coverage, dangerous sinks (SSRF/injection/traversal/RCE surfaces), dependency CVEs, and previous investigation notes. |
 
 ### Live Testing
 
-| Tool | What it does |
-|------|-------------|
-| **`test_endpoint`** | HTTP security checks against live URLs. Passive mode (default): CORS preflight + header analysis. Active mode: auth bypass probing, method enumeration, info leak detection. |
-| **`test_ssrf`** | Starts an SSRF callback catcher via [interactsh](https://github.com/projectdiscovery/interactsh). Returns a unique `*.oast.fun` URL to inject. Polls for out-of-band callbacks. Falls back to local HTTP listener. |
+| Tool                | What it does                                                                                                                                                                                                       |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`test_endpoint`** | HTTP security checks against live URLs. Passive mode (default): CORS preflight + header analysis. Active mode: auth bypass probing, method enumeration, info leak detection.                                       |
+| **`test_ssrf`**     | Starts an SSRF callback catcher via [interactsh](https://github.com/projectdiscovery/interactsh). Returns a unique `*.oast.fun` URL to inject. Polls for out-of-band callbacks. Falls back to local HTTP listener. |
 
 ### Intelligence
 
-| Tool | What it does |
-|------|-------------|
+| Tool              | What it does                                                                                                               |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | **`check_vulns`** | Searches NVD + GitHub security advisories in one call. Rate-limited (5 req/30s free, 50 with API key). Results cached 24h. |
 
 ### Investigation
 
-| Tool | What it does |
-|------|-------------|
+| Tool       | What it does                                                                                                                                                                                 |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`note`** | Save/retrieve investigation notes per target with tags (`checked`, `interesting`, `dead_end`, `todo`, `finding`). Persists in SQLite across sessions. Loaded automatically by `map_surface`. |
 
 ### Reporting
 
-| Tool | What it does |
-|------|-------------|
+| Tool              | What it does                                                                                                                                                                                 |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`make_report`** | Generates platform-ready vulnerability reports. Huntr: JSON with auto-detected package manager + version. GitHub: private vulnerability report markdown. Includes full CVSS 3.1 calculation. |
 
-### Platform *(stubs — scraper coming)*
+### Platform _(stubs — scraper coming)_
 
-| Tool | What it does |
-|------|-------------|
+| Tool                | What it does                                                                       |
+| ------------------- | ---------------------------------------------------------------------------------- |
 | **`hunt_programs`** | Search huntr.com for bounty targets with language, bounty, and saturation filters. |
-| **`hunt_reports`** | Check existing vulnerability reports + CWE-based duplicate detection. |
-| **`hunt_submit`** | Fill huntr.com submission form via Chrome CDP. |
+| **`hunt_reports`**  | Check existing vulnerability reports + CWE-based duplicate detection.              |
+| **`hunt_submit`**   | Fill huntr.com submission form via Chrome CDP.                                     |
 
 ---
 
@@ -131,17 +131,17 @@ Repos are cloned locally so Claude uses its **native file tools** (Read, Grep, G
 
 Route extraction, auth detection, and vulnerability checklists cover:
 
-| Framework | Language | Routes | Auth | Sinks |
-|-----------|----------|:------:|:----:|:-----:|
-| Express | JS/TS | ✓ | ✓ | ✓ |
-| FastAPI | Python | ✓ | ✓ | ✓ |
-| Flask | Python | ✓ | ✓ | ✓ |
-| Django | Python | ✓ | ✓ | ✓ |
-| Next.js API | JS/TS | ✓ | ✓ | ✓ |
-| NestJS | TypeScript | ✓ | ✓ | ✓ |
-| Hono | TypeScript | ✓ | ✓ | ✓ |
-| Go (chi/gin/mux) | Go | ✓ | ✓ | ✓ |
-| Axum / Actix | Rust | ✓ | ✓ | ✓ |
+| Framework        | Language   | Routes | Auth | Sinks |
+| ---------------- | ---------- | :----: | :--: | :---: |
+| Express          | JS/TS      |   ✓    |  ✓   |   ✓   |
+| FastAPI          | Python     |   ✓    |  ✓   |   ✓   |
+| Flask            | Python     |   ✓    |  ✓   |   ✓   |
+| Django           | Python     |   ✓    |  ✓   |   ✓   |
+| Next.js API      | JS/TS      |   ✓    |  ✓   |   ✓   |
+| NestJS           | TypeScript |   ✓    |  ✓   |   ✓   |
+| Hono             | TypeScript |   ✓    |  ✓   |   ✓   |
+| Go (chi/gin/mux) | Go         |   ✓    |  ✓   |   ✓   |
+| Axum / Actix     | Rust       |   ✓    |  ✓   |   ✓   |
 
 Unsupported frameworks fall back to HTTP method pattern grep with lower confidence.
 
@@ -149,12 +149,12 @@ Unsupported frameworks fall back to HTTP method pattern grep with lower confiden
 
 `map_surface` identifies dangerous code patterns across all supported languages:
 
-| Sink Type | Patterns | Attack Surface |
-|-----------|----------|---------------|
-| **Outbound HTTP** | `requests.get`, `fetch`, `httpx`, `http.Get` | SSRF |
-| **Database Queries** | Raw SQL, `$where`, f-string queries, `query(` | Injection |
-| **File Operations** | `open()`, `readFile`, `os.Open`, `Path(` | Path Traversal |
-| **Exec Calls** | `subprocess`, `child_process`, `os/exec` | Command Injection |
+| Sink Type            | Patterns                                      | Attack Surface    |
+| -------------------- | --------------------------------------------- | ----------------- |
+| **Outbound HTTP**    | `requests.get`, `fetch`, `httpx`, `http.Get`  | SSRF              |
+| **Database Queries** | Raw SQL, `$where`, f-string queries, `query(` | Injection         |
+| **File Operations**  | `open()`, `readFile`, `os.Open`, `Path(`      | Path Traversal    |
+| **Exec Calls**       | `subprocess`, `child_process`, `os/exec`      | Command Injection |
 
 ---
 
@@ -165,7 +165,7 @@ Unsupported frameworks fall back to HTTP method pattern grep with lower confiden
 - **Python 3.13+**
 - **[uv](https://github.com/astral-sh/uv)** package manager
 - **[Claude Code](https://claude.ai/code)** CLI
-- **[gh](https://cli.github.com/)** CLI *(optional — for GitHub advisory search)*
+- **[gh](https://cli.github.com/)** CLI _(optional — for GitHub advisory search)_
 
 ### Install
 
@@ -190,14 +190,14 @@ claude mcp add bounty-hunter -s user -- \
 # → bounty-hunter: 10 tools, 2 prompts, 1 resource
 ```
 
-### Environment Variables *(optional)*
+### Environment Variables _(optional)_
 
-| Variable | Effect |
-|----------|--------|
-| `NVD_API_KEY` | NVD rate limit: 5 → 50 requests per 30s |
-| `HUNTR_SESSION_COOKIE` | Authenticated huntr.com scraping |
-| `GITHUB_TOKEN` | For `gh` CLI *(usually already configured)* |
-| `BOUNTY_WORKSPACE` | Override clone directory *(default: `~/Projects/bounty-targets/`)* |
+| Variable               | Effect                                                             |
+| ---------------------- | ------------------------------------------------------------------ |
+| `NVD_API_KEY`          | NVD rate limit: 5 → 50 requests per 30s                            |
+| `HUNTR_SESSION_COOKIE` | Authenticated huntr.com scraping                                   |
+| `GITHUB_TOKEN`         | For `gh` CLI _(usually already configured)_                        |
+| `BOUNTY_WORKSPACE`     | Override clone directory _(default: `~/Projects/bounty-targets/`)_ |
 
 ---
 
@@ -286,13 +286,13 @@ bounty_hunter/
 
 ### Design Principles
 
-| Principle | Implementation |
-|-----------|---------------|
-| **Token-efficient** | Summary-first responses. Full data only with `verbose=true`. |
+| Principle              | Implementation                                                                      |
+| ---------------------- | ----------------------------------------------------------------------------------- |
+| **Token-efficient**    | Summary-first responses. Full data only with `verbose=true`.                        |
 | **Passive by default** | Live testing defaults to safe mode (HEAD/OPTIONS). Active requires explicit opt-in. |
-| **Native file access** | Repos cloned locally so the AI uses Read/Grep/Glob directly — no extra tool calls. |
-| **Persistent state** | Investigation notes + cache survive across sessions via SQLite. |
-| **Auto-cleanup** | Reported repos auto-deleted. Stale repos (>7 days) pruned on server startup. |
+| **Native file access** | Repos cloned locally so the AI uses Read/Grep/Glob directly — no extra tool calls.  |
+| **Persistent state**   | Investigation notes + cache survive across sessions via SQLite.                     |
+| **Auto-cleanup**       | Reported repos auto-deleted. Stale repos (>7 days) pruned on server startup.        |
 
 ### Data Flow
 
